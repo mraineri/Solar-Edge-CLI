@@ -15,17 +15,48 @@ External modules:
 ## Usage
 
 ```
-usage: solar-edge-cli.py [-h] [--config CONFIG]
+usage: solar-edge-cli.py [-h] [--config CONFIG] {inventory,energy} ...
 
 A tool collect and display data from SolarEdge
 
-required arguments:
-  --config CONFIG, -c CONFIG
-                        Filepath to the config file containing site ID and API
-                        key; defaults to 'config.json'
+positional arguments:
+  {inventory,energy}
+    inventory           Displays the inventory of the site equipment
+    energy              Displays the energy production of the site over a
+                        period of time
 
 optional arguments:
   -h, --help            show this help message and exit
+  --config CONFIG, -c CONFIG
+                        Filepath to the config file containing site ID and API
+                        key; defaults to 'config.json'
+```
+
+### Inventory
+
+Displays the inventory of the site equipment.
+
+```
+usage: solar-edge-cli.py inventory [-h]
+
+optional arguments:
+  -h, --help  show this help message and exit
+```
+
+### Energy
+
+Displays the energy production of the site over a period of time
+
+```
+usage: solar-edge-cli.py energy [-h] [--start START] [--end END]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --start START, -start START
+                        The start date for reporting energy production; one
+                        month ago if not specified
+  --end END, -end END   The end date for reporting energy production; today if
+                        not specified
 ```
 
 ## Configuration File
