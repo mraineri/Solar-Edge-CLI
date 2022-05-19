@@ -118,8 +118,8 @@ argget.add_argument( "--config", "-c", type = str, help = "Filepath to the confi
 subparsers = argget.add_subparsers( dest = "command" )
 inventory_argget = subparsers.add_parser( "inventory", help = "Displays the inventory of the site equipment" )
 energy_argget = subparsers.add_parser( "energy", help = "Displays the energy production of the site over a period of time" )
-energy_argget.add_argument( "--start", "-start", type = str, help = "The start date for reporting energy production; one month ago if not specified" )
-energy_argget.add_argument( "--end", "-end", type = str, help = "The end date for reporting energy production; today if not specified" )
+energy_argget.add_argument( "--start", "-start", type = str, help = "The start date for reporting energy production; defaults to one month ago" )
+energy_argget.add_argument( "--end", "-end", type = str, help = "The end date for reporting energy production; defaults to today" )
 args = argget.parse_args()
 
 # Load the config file

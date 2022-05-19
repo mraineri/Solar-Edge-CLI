@@ -53,10 +53,10 @@ usage: solar-edge-cli.py energy [-h] [--start START] [--end END]
 optional arguments:
   -h, --help            show this help message and exit
   --start START, -start START
-                        The start date for reporting energy production; one
-                        month ago if not specified
-  --end END, -end END   The end date for reporting energy production; today if
-                        not specified
+                        The start date for reporting energy production;
+                        defaults to one month ago
+  --end END, -end END   The end date for reporting energy production; defaults
+                        to today
 ```
 
 ## Configuration File
