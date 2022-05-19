@@ -68,8 +68,6 @@ def get_inventory( config ):
                     print( "    Category: {}".format( item["category"] ) )
         print()
 
-    return
-
 def get_energy( config, start, end ):
     """
     Gets and prints the energy production of the site over a period of time
@@ -101,6 +99,7 @@ def get_energy( config, start, end ):
     payload = response.json()
 
     # Display the energy produced
+    print()
     unit = payload["energy"]["unit"]
     total_energy = 0
     for item in payload["energy"]["values"]:
@@ -111,6 +110,7 @@ def get_energy( config, start, end ):
             print( "{}: No energy reported".format( item["date"].split( " " )[0] ) )
     print()
     print( "Total energy produced over the period: {}{}".format( total_energy, unit ) )
+    print()
 
 # Get the input arguments
 argget = argparse.ArgumentParser( description = "A tool collect and display data from SolarEdge" )
