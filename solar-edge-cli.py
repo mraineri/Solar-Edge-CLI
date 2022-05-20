@@ -10,7 +10,7 @@ import re
 import requests
 
 SE_INVENTORY_API = "https://monitoringapi.solaredge.com/site/{}/inventory?api_key={}"
-SE_ENERGY_API = "https://monitoringapi.solaredge.com/site/{}/energy?timeUnit=DAY&endDate={}&startDate={}&api_key={}"
+SE_ENERGY_API = "https://monitoringapi.solaredge.com/site/{}/energyDetails?timeUnit=DAY&endTime={}&startTime={}&api_key={}"
 
 def check_response( response ):
     """
@@ -94,22 +94,38 @@ def get_energy( config, start, end ):
         raise ValueError( "End date needs to be in the form YYYY-MM-DD" )
 
     # Get the site energy production
-    response = requests.get( SE_ENERGY_API.format( config["SiteId"], end, start, config["APIKey"] ) )
+    response = requests.get( SE_ENERGY_API.format( config["SiteId"], end + " 23:59:59", start + " 00:00:00", config["APIKey"] ) )
     check_response( response )
     payload = response.json()
 
-    # Display the energy produced
+    # Display the energy produced as a table
     print()
-    unit = payload["energy"]["unit"]
-    total_energy = 0
-    for item in payload["energy"]["values"]:
-        if item["value"] is not None:
-            print( "{}: {}{}".format( item["date"].split( " " )[0], item["value"], unit ) )
-            total_energy = total_energy + item["value"]
-        else:
-            print( "{}: No energy reported".format( item["date"].split( " " )[0] ) )
+    date_format = "{:>10s}"
+    value_format = " {:>13s}"
+    unit = payload["energyDetails"]["unit"]
+    header_str = date_format.format( "" )
+    meter_values = []
+    meter_totals = []
+    for item in payload["energyDetails"]["meters"]:
+        meter_values.append( item["values"] )
+        meter_totals.append( 0 )
+        header_str = header_str + value_format.format( item["type"] )
+    print( header_str )
+    for data_point in list( zip( *meter_values ) ):
+        out_str = date_format.format( data_point[0]["date"].split( " " )[0] )
+        for i, item in enumerate( data_point ):
+            value = ""
+            if "value" in item:
+                value = "{}{}".format( item["value"], unit )
+                meter_totals[i] = meter_totals[i] + item["value"]
+            out_str = out_str + value_format.format( value )
+        print( out_str )
+    footer_str = date_format.format( "Totals" )
+    for item in meter_totals:
+        value = "{}{}".format( item, unit )
+        footer_str = footer_str + value_format.format( value )
     print()
-    print( "Total energy produced over the period: {}{}".format( total_energy, unit ) )
+    print( footer_str )
     print()
 
 # Get the input arguments
